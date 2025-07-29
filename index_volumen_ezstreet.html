@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora de Volumen – EZ Street</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        h1 {
+            color: #003366;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            font-size: 1em;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #003366;
+            color: white;
+            font-size: 1em;
+            border: none;
+            cursor: pointer;
+        }
+        .resultado {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e9f5ff;
+            border-left: 5px solid #003366;
+        }
+        img {
+            max-width: 100%;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculadora de Volumen – EZ Street</h1>
+    <label for="largo">🛢️ Largo del tanque (metros):</label>
+    <input type="number" id="largo" step="0.01">
+
+    <label for="radio">🔵 Radio del tanque (metros):</label>
+    <input type="number" id="radio" step="0.01">
+
+    <label for="altura">📍 Altura medida con varilla (metros):</label>
+    <input type="number" id="altura" step="0.01">
+
+    <button onclick="calcularVolumen()">CALCULAR</button>
+
+    <div class="resultado" id="resultado"></div>
+
+    <p>Referencias: L = Largo, R = Radio, A = Altura medida con varilla</p>
+    <img src="https://raw.githubusercontent.com/gerardo0503/calculadora-ezstreet/main/volumen-tanque.png" alt="Esquema del tanque con L, R y A">
+
+    <script>
+        function calcularVolumen() {
+            const L = parseFloat(document.getElementById('largo').value);
+            const R = parseFloat(document.getElementById('radio').value);
+            const A = parseFloat(document.getElementById('altura').value);
+            const res = document.getElementById('resultado');
+
+            if (isNaN(L) || isNaN(R) || isNaN(A) || A > 2 * R || A < 0) {
+                res.innerHTML = "<b>Error:</b> Verifica los valores ingresados. Altura debe ser menor al diámetro (2 × radio).";
+                return;
+            }
+
+            const theta = 2 * Math.acos((R - A) / R);
+            const areaSegmento = 0.5 * R * R * (theta - Math.sin(theta));
+            const volumen = areaSegmento * L;
+            const volumenLitros = volumen * 1000;
+
+            res.innerHTML = `
+                <b>Resultado:</b><br>
+                Volumen actual: ${volumen.toFixed(3)} m³<br>
+                Volumen actual: ${volumenLitros.toFixed(2)} litros
+            `;
+        }
+    </script>
+</body>
+</html>
